@@ -1,0 +1,6 @@
+.luarc.json
+package-lock.json
+package.json
+node_modules/
+lazy-lock.json
+.git/
