@@ -28,8 +28,6 @@ local on_attach = function(client, bufnr)
     })
   end
 
-  client.server_capabilities.documentFormattingProvider = false
-  client.server_capabilities.documentRangeFormattingProvider = false
 end
 
 local servers = {

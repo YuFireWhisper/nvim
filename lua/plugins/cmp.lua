@@ -10,8 +10,15 @@ return {
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
+      local is_copilot_enabled = function()
+        local ok, _ = pcall(require, "copilot")
+        if not ok then return false end
+        local plugins = require("lazy.core.config").plugins
+        return plugins["copilot.vim"] and not plugins["copilot.vim"].enabled == false
+      end
 
       local has_copilot_suggestion = function()
+        if not is_copilot_enabled() then return false end
         return vim.fn['copilot#GetDisplayedSuggestion']()['text'] ~= ''
       end
 
@@ -41,8 +48,6 @@ return {
               end
             elseif cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
             else
               fallback()
             end
