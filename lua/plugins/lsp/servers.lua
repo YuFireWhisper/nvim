@@ -27,7 +27,6 @@ local on_attach = function(client, bufnr)
       end,
     })
   end
-
 end
 
 local servers = {
@@ -45,59 +44,45 @@ local servers = {
       },
     },
   },
-
   pyright = {
     settings = {
       python = {
         analysis = {
           typeCheckingMode = "basic",
-          autoSearchPaths = true,
-          useLibraryCodeForTypes = true,
         },
       },
     },
   },
-
   eslint = {
     settings = {
       workingDirectory = { mode = "location" },
-      validate = "on",
-      packageManager = "npm",
-      quiet = true,
-      format = true,
       onIgnoredFiles = "off",
     },
     root_dir = function(fname)
       return lspconfig.util.find_git_ancestor(fname) or vim.fn.getcwd()
     end,
   },
-  clangd = {},
-  cssls = {},
-  html = {},
   emmet_ls = {
     filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
   },
-  tailwindcss = {},
-  jsonls = {},
-  lua_ls = {},
 }
 
 vim.diagnostic.config({
-  virtual_text = true,
-  signs = true,
-  underline = true,
-  update_in_insert = false,
-  severity_sort = true,
   float = {
     border = "rounded",
     source = "always",
-    header = "",
-    prefix = "",
   },
 })
 
-for server, config in pairs(servers) do
-  config.capabilities = capabilities
-  config.on_attach = on_attach
-  lspconfig[server].setup(config)
+for server_name, server_config in pairs(servers) do
+  server_config.capabilities = capabilities
+  server_config.on_attach = on_attach
+  lspconfig[server_name].setup(server_config)
+end
+
+for _, server_name in ipairs({ "clangd", "cssls", "html", "tailwindcss", "jsonls", "lua_ls" }) do
+  lspconfig[server_name].setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+  })
 end
