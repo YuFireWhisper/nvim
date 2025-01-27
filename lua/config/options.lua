@@ -8,6 +8,15 @@ opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.wrap = false
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true        -- 啟用換行
+    vim.opt_local.linebreak = false  -- 在單詞邊界換行
+    vim.opt_local.breakindent = true -- 保持縮進
+  end
+})
+
 -- 搜索相關
 opt.ignorecase = true
 opt.smartcase = true

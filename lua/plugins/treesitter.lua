@@ -17,7 +17,9 @@ return {
           "css",
           "json",
           "yaml",
-          "markdown"
+          "markdown",
+          "rust",
+          "toml",
         },
         sync_install = false,
         auto_install = true,
