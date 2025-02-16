@@ -9,30 +9,34 @@ return {
         ensure_installed = {
           "lua",
           "vim",
-          "typescript",
           "javascript",
+          "typescript",
           "python",
-          "tsx",
           "html",
           "css",
+          "tsx",
           "json",
           "yaml",
           "markdown",
           "rust",
           "toml",
         },
-        sync_install = false,
-        auto_install = true,
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
         },
         indent = { enable = true },
         autotag = { enable = true },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<CR>",
+            node_incremental = "<CR>",
+            node_decremental = "<BS>",
+            scope_incremental = "<TAB>",
+          },
+        },
       })
-
-      local install_dir = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/parser"
-      vim.fn.mkdir(install_dir, "p")
     end,
   },
 }

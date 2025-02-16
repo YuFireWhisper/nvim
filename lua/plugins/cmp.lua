@@ -10,20 +10,22 @@ return {
       "hrsh7th/cmp-vsnip",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
+      "onsails/lspkind.nvim",
+      "roobert/tailwindcss-colorizer-cmp.nvim",
     },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      local is_copilot_enabled = function()
+
+      local function is_copilot_enabled()
         local ok, _ = pcall(require, "copilot")
         if not ok then return false end
         local plugins = require("lazy.core.config").plugins
-        return plugins["copilot.vim"] and not plugins["copilot.vim"].enabled == false
+        return plugins["copilot.vim"] and plugins["copilot.vim"].enabled ~= false
       end
 
-      local has_copilot_suggestion = function()
-        if not is_copilot_enabled() then return false end
-        return vim.fn['copilot#GetDisplayedSuggestion']()['text'] ~= ''
+      local function has_copilot_suggestion()
+        return is_copilot_enabled() and vim.fn['copilot#GetDisplayedSuggestion']()['text'] ~= ''
       end
 
       cmp.setup({
@@ -37,20 +39,18 @@ return {
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<ESC>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.close()
-            else
-              fallback()
-            end
+            if cmp.visible() then cmp.close() else fallback() end
           end),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if has_copilot_suggestion() then
-              local copilot_keys = vim.fn['copilot#Accept']()
-              if copilot_keys ~= '' then
-                vim.api.nvim_feedkeys(copilot_keys, 'i', true)
+              local keys = vim.fn['copilot#Accept']()
+              if keys ~= '' then
+                vim.api.nvim_feedkeys(keys, 'i', true)
+                return
               end
-            elseif cmp.visible() then
+            end
+            if cmp.visible() then
               cmp.select_next_item()
             else
               fallback()
@@ -70,6 +70,7 @@ return {
           { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
+          { name = 'tailwindcss' },
         }, {
           { name = 'buffer' },
         }),
@@ -87,8 +88,14 @@ return {
           { name = 'git' },
         }, {
           { name = 'buffer' },
-        })
+        }),
       })
+    end,
+  },
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup()
     end,
   },
 }

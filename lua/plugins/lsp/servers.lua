@@ -30,15 +30,12 @@ local on_attach = function(client, bufnr)
       buffer = bufnr,
       callback = function()
         local diagnostics = vim.diagnostic.get(0)
-
         if #diagnostics > 0 then
           vim.lsp.buf.code_action({
             filter = function(action)
-              return action.kind and (
-                action.kind == "quickfix" or
-                action.kind == "source.fixAll" or
-                action.kind == "source.fixAll.clang-tidy"
-              )
+              return action.kind and (action.kind == "quickfix"
+                or action.kind == "source.fixAll"
+                or action.kind == "source.fixAll.clang-tidy")
             end,
             apply = true,
           })
@@ -85,7 +82,6 @@ local servers = {
         analysis = {
           typeCheckingMode = "basic",
           pythonPath = vim.fn.exepath('python'),
-          autoSearchPaths = true,
           diagnosticMode = "workspace",
           autoImportCompletions = true,
           useLibraryCodeForTypes = true,
@@ -135,18 +131,13 @@ vim.diagnostic.config({
   virtual_text = {
     prefix = '~',
     format = function(diagnostic)
-      return string.format('%s', diagnostic.message)
+      return diagnostic.message
     end,
   },
   float = {
     border = "rounded",
     source = "always",
-    header = "",
-    prefix = "",
   },
-  signs = true,
-  underline = true,
-  update_in_insert = false,
   severity_sort = true,
 })
 
@@ -156,7 +147,7 @@ for server_name, server_config in pairs(servers) do
   lspconfig[server_name].setup(server_config)
 end
 
-for _, server_name in ipairs({ "cssls", "html", "tailwindcss", "jsonls", "lua_ls" }) do
+for _, server_name in ipairs({ "cssls", "html", "jsonls", "lua_ls", "tailwindcss" }) do
   lspconfig[server_name].setup({
     capabilities = capabilities,
     on_attach = on_attach,

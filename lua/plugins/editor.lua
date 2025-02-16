@@ -12,15 +12,12 @@ return {
     end,
     cmd = "Neotree",
     keys = {
-      { "<F3>", "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
-      { "<leader>e", "<cmd>Neotree focus<cr>", desc = "Focus file tree", silent = true },
+      { "<F3>", "<cmd>Neotree toggle<cr>", desc = "切換檔案樹" },
+      { "<leader>e", "<cmd>Neotree focus<cr>", desc = "聚焦檔案樹", silent = true },
     },
     opts = {
-      sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-      open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
       filesystem = {
         filtered_items = {
-          visible = false,
           hide_dotfiles = false,
           hide_gitignored = false,
         },
@@ -28,18 +25,14 @@ return {
         use_libuv_file_watcher = true,
       },
       window = {
-        position = "left",
-        width = 30,
         mappings = {
           ["<space>"] = "none",
         },
       },
       default_component_configs = {
         indent = {
-          with_expanders = true,
           expander_collapsed = "",
           expander_expanded = "",
-          expander_highlight = "NeoTreeExpander",
         },
       },
     },
@@ -53,6 +46,25 @@ return {
         separator = "➜",
         group = "+",
       },
-    }
+    },
+  },
+  {
+    "windwp/nvim-ts-autotag",
+  },
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup()
+    end,
+  },
+  {
+    "laytan/tailwind-sorter.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-lua/plenary.nvim",
+    },
+    build = "cd formatter && npm i && npm run build",
+    config = true,
   },
 }
