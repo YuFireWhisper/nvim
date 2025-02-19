@@ -24,14 +24,18 @@ return {
               table.insert(texts, text)
             end
             local diagnostic_text = table.concat(texts, "\n")
-            vim.fn.setreg('+', diagnostic_text)
-            vim.notify("Copied " .. #diagnostics .. " diagnostic messages to clipboard!")
+
+            local osc52_command = string.format("\027]52;c;%s\007", diagnostic_text)
+            vim.fn.system('printf "%s"', osc52_command)
+
+            vim.notify("Copied " .. #diagnostics .. " diagnostic messages to OSC 52 clipboard!")
           else
             vim.notify("No diagnostics to copy!")
           end
         end,
-        desc = "Copy all diagnostics"
+        desc = "Copy all diagnostics to OSC 52"
       },
     },
   }
 }
+

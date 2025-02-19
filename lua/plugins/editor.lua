@@ -12,8 +12,8 @@ return {
     end,
     cmd = "Neotree",
     keys = {
-      { "<F3>", "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
-      { "<leader>e", "<cmd>Neotree focus<cr>", desc = "Focus file tree", silent = true },
+      { "<F3>",      "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
+      { "<leader>e", "<cmd>Neotree focus<cr>",  desc = "Focus file tree", silent = true },
     },
     opts = {
       sources = { "filesystem", "buffers", "git_status", "document_symbols" },
