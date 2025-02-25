@@ -5,6 +5,15 @@ if pcall(require, "cmp_nvim_lsp") then
   capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 end
 
+local function get_python_path()
+  local venv = os.getenv("VIRTUAL_ENV")
+  if venv then
+    return venv .. "/bin/python"
+  else
+    return vim.fn.exepath("python3") or vim.fn.exepath("python")
+  end
+end
+
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -33,9 +42,14 @@ local on_attach = function(client, bufnr)
         if #diagnostics > 0 then
           vim.lsp.buf.code_action({
             filter = function(action)
-              return action.kind and (action.kind == "quickfix"
-                or action.kind == "source.fixAll"
-                or action.kind == "source.fixAll.clang-tidy")
+              return action.kind and (
+                action.kind == "quickfix" or
+                action.kind == "source.fixAll" or
+                action.kind == "source.fixAll.clang-tidy" or
+                action.kind == "source.fixAll.python" or
+                action.kind == "source.fixAll.ruff" or
+                action.kind == "source.organizeImports"
+              )
             end,
             apply = true,
           })
@@ -81,7 +95,7 @@ local servers = {
       python = {
         analysis = {
           typeCheckingMode = "basic",
-          pythonPath = vim.fn.exepath('python'),
+          pythonPath = get_python_path(),
           diagnosticMode = "workspace",
           autoImportCompletions = true,
           useLibraryCodeForTypes = true,
@@ -121,6 +135,15 @@ local servers = {
       ["rust-analyzer"] = {
         checkOnSave = {
           command = "clippy",
+        },
+      },
+    },
+  },
+  taplo = {
+    settings = {
+      taplo = {
+        diagnostics = {
+          enable = true,
         },
       },
     },

@@ -21,6 +21,7 @@ return {
           "jsonls",
           "lua_ls",
           "rust_analyzer",
+          "taplo",
         },
       })
 
