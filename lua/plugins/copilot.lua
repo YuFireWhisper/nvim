@@ -84,6 +84,9 @@ return {
           context = 'git:staged',
         },
       },
+      selection = function(_)
+        return nil
+      end
     },
     keys = {
       {
