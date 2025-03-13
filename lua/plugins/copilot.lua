@@ -24,6 +24,14 @@ local commit_prompt = [[
 5. Wrap body text at 72 characters
 6. Explain what and why, not how
 
+## Details Format
+- If including details, start each point with a hyphen (-)
+- Details are optional
+- Example:
+feat: add user authentication system
+- Implement JWT token generation
+- Add password hashing with bcrypt
+
 ## Examples
 feat: implement user authentication system
 fix: resolve null pointer in login form
