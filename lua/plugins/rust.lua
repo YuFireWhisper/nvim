@@ -6,88 +6,83 @@ return {
       "neovim/nvim-lspconfig",
       "nvim-lua/plenary.nvim",
     },
-    config = function()
-      local rt = require("rust-tools")
-      rt.setup({
-        server = {
-          on_attach = function(client, bufnr)
-            local bufopts = { noremap = true, silent = true, buffer = bufnr }
-            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-            vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-            vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-            vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-            vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-            vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    opts = {
+      server = {
+        on_attach = function(client, bufnr)
+          local bufopts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend("force", bufopts, { desc = "跳轉到定義" }))
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, vim.tbl_extend("force", bufopts, { desc = "顯示懸浮資訊" }))
+          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, vim.tbl_extend("force", bufopts, { desc = "跳轉到實現" }))
+          vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, vim.tbl_extend("force", bufopts, { desc = "重命名" }))
+          vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, vim.tbl_extend("force", bufopts, { desc = "代碼操作" }))
+          vim.keymap.set('n', 'gr', vim.lsp.buf.references, vim.tbl_extend("force", bufopts, { desc = "查找引用" }))
+          vim.keymap.set("n", "<leader>rt", "<cmd>RustTest<CR>",
+            vim.tbl_extend("force", bufopts, { desc = "運行 Rust 測試" }))
+          vim.keymap.set("n", "ra", "<cmd>RustTest!<CR>", vim.tbl_extend("force", bufopts, { desc = "運行所有 Rust 測試" }))
 
-            vim.keymap.set("n", "<leader>rh", rt.hover_actions.hover_actions, bufopts)
-            vim.keymap.set("n", "<leader>ra", rt.code_action_group.code_action_group, bufopts)
-            vim.keymap.set("n", "<leader>re", rt.expand_macro.expand_macro, bufopts)
-            vim.keymap.set("n", "<leader>rr", rt.runnables.runnables, bufopts)
-            vim.keymap.set("n", "<F5>", "<cmd>RustRun<CR>", bufopts)
-            vim.keymap.set("n", "<leader>rd", rt.debuggables.debuggables, bufopts)
-
-            if client.server_capabilities.documentFormattingProvider then
-              local format_group = vim.api.nvim_create_augroup("RustFormatting", { clear = true })
-              vim.api.nvim_create_autocmd("BufWritePre", {
-                group = format_group,
-                buffer = bufnr,
-                callback = function()
-                  vim.lsp.buf.format({ async = false })
-                end,
-              })
-            end
-          end,
-          settings = {
-            ["rust-analyzer"] = {
-              checkOnSave = {
-                command = "clippy",
-              },
-              cargo = {
-                allFeatures = true,
-              },
-              procMacro = {
+          if client.server_capabilities.documentFormattingProvider then
+            local format_group = vim.api.nvim_create_augroup("RustFormatting", { clear = true })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = format_group,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format({ async = false })
+              end,
+            })
+          end
+        end,
+        settings = {
+          ["rust-analyzer"] = {
+            checkOnSave = {
+              command = "clippy",
+            },
+            cargo = {
+              allFeatures = true,
+            },
+            procMacro = {
+              enable = true,
+            },
+            diagnostics = {
+              enable = true,
+              experimental = {
                 enable = true,
               },
-              diagnostics = {
-                enable = true,
-                experimental = {
-                  enable = true,
-                },
+            },
+            check = {
+              command = "check",
+              extraArgs = "--all-features",
+            },
+            imports = {
+              granularity = {
+                group = "crate",
               },
-              check = {
-                command = "check",
-                extraArgs = "--all-features",
-              },
+              prefix = "crate",
             },
           },
         },
-        tools = {
-          inlay_hints = {
-            auto = true,
-            show_parameter_hints = true,
-          },
-          hover_actions = {
-            auto_focus = true,
-          },
+      },
+      tools = {
+        inlay_hints = {
+          auto = true,
+          show_parameter_hints = true,
         },
-      })
-    end,
+        hover_actions = {
+          auto_focus = true,
+        },
+      },
+    },
   },
   {
     "saecki/crates.nvim",
     ft = { "rust", "toml" },
-    config = function()
-      require("crates").setup({
-        null_ls = {
-          enabled = true,
-          name = "crates.nvim",
-        },
-        popup = {
-          border = "rounded",
-        },
-      })
-    end,
+    opts = {
+      null_ls = {
+        enabled = true,
+        name = "crates.nvim",
+      },
+      popup = {
+        border = "rounded",
+      },
+    },
   },
 }
