@@ -20,7 +20,6 @@ return {
           "clangd",
           "jsonls",
           "lua_ls",
-          "rust_analyzer",
           "taplo",
         },
       })

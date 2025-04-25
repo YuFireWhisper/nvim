@@ -1,11 +1,8 @@
 return {
   {
-    "simrat39/rust-tools.nvim",
-    ft = "rust",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "nvim-lua/plenary.nvim",
-    },
+    'mrcjkb/rustaceanvim',
+    version = '^5',
+    lazy = false,
     opts = {
       server = {
         on_attach = function(client, bufnr)
@@ -13,6 +10,7 @@ return {
           vim.keymap.set('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend("force", bufopts, { desc = "跳轉到定義" }))
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, vim.tbl_extend("force", bufopts, { desc = "顯示懸浮資訊" }))
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, vim.tbl_extend("force", bufopts, { desc = "跳轉到實現" }))
+          vim.keymap.set('n', '<leader>fm', vim.lsp.buf.format, vim.tbl_extend("force", bufopts, { desc = "格式化" }))
           vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, vim.tbl_extend("force", bufopts, { desc = "重命名" }))
           vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, vim.tbl_extend("force", bufopts, { desc = "代碼操作" }))
           vim.keymap.set('n', 'gr', vim.lsp.buf.references, vim.tbl_extend("force", bufopts, { desc = "查找引用" }))
@@ -60,17 +58,16 @@ return {
             },
           },
         },
-      },
-      tools = {
-        inlay_hints = {
-          auto = true,
-          show_parameter_hints = true,
-        },
-        hover_actions = {
-          auto_focus = true,
+        tools = {
+          hover_actions = {
+            auto_focus = true,
+          },
         },
       },
     },
+    config = function(_, opts)
+      vim.g.rustaceanvim = opts
+    end
   },
   {
     "saecki/crates.nvim",

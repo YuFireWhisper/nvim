@@ -66,6 +66,11 @@ return {
     },
     keys = {
       {
+        "<leader>cc",
+        "<cmd>CopilotChat<cr>",
+        desc = "Open CopilotChat",
+      },
+      {
         "<leader>cm",
         "<cmd>CopilotChatCommit<cr>",
         desc = "CopilotChat - Commit",

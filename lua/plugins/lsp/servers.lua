@@ -130,15 +130,6 @@ local servers = {
       "--fallback-style=llvm",
     },
   },
-  rust_analyzer = {
-    settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
-      },
-    },
-  },
   taplo = {
     settings = {
       taplo = {
