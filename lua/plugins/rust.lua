@@ -1,7 +1,7 @@
 return {
   {
     'mrcjkb/rustaceanvim',
-    version = '^5',
+    version = '^6',
     lazy = false,
     opts = {
       server = {
@@ -14,9 +14,11 @@ return {
           vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, vim.tbl_extend("force", bufopts, { desc = "重命名" }))
           vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, vim.tbl_extend("force", bufopts, { desc = "代碼操作" }))
           vim.keymap.set('n', 'gr', vim.lsp.buf.references, vim.tbl_extend("force", bufopts, { desc = "查找引用" }))
+
           vim.keymap.set("n", "<leader>rt", "<cmd>RustTest<CR>",
             vim.tbl_extend("force", bufopts, { desc = "運行 Rust 測試" }))
-          vim.keymap.set("n", "ra", "<cmd>RustTest!<CR>", vim.tbl_extend("force", bufopts, { desc = "運行所有 Rust 測試" }))
+          vim.keymap.set("n", "<leader>ra", "<cmd>RustTest!<CR>",
+            vim.tbl_extend("force", bufopts, { desc = "運行所有 Rust 測試" }))
 
           if client.server_capabilities.documentFormattingProvider then
             local format_group = vim.api.nvim_create_augroup("RustFormatting", { clear = true })
@@ -31,55 +33,37 @@ return {
         end,
         settings = {
           ["rust-analyzer"] = {
-            checkOnSave = {
+            check = {
               command = "clippy",
             },
             cargo = {
-              allFeatures = true,
-            },
-            procMacro = {
-              enable = true,
+              features = "all",
             },
             diagnostics = {
-              enable = true,
-              experimental = {
-                enable = true,
-              },
-            },
-            check = {
-              command = "check",
-              extraArgs = "--all-features",
+              disabled = { "inactive-code" },
             },
             imports = {
               granularity = {
-                group = "crate",
+                enforce = true,
               },
               prefix = "crate",
             },
           },
         },
         tools = {
-          hover_actions = {
-            auto_focus = true,
-          },
+          hover_actions = { auto_focus = true },
         },
       },
     },
     config = function(_, opts)
       vim.g.rustaceanvim = opts
-    end
+    end,
   },
   {
     "saecki/crates.nvim",
     ft = { "rust", "toml" },
     opts = {
-      null_ls = {
-        enabled = true,
-        name = "crates.nvim",
-      },
-      popup = {
-        border = "rounded",
-      },
+      popup = { border = "rounded" },
     },
   },
 }

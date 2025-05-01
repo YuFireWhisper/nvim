@@ -51,6 +51,7 @@ return {
     dependencies = {
       { "github/copilot.vim" },
       { "nvim-lua/plenary.nvim" },
+      { "nvim-telescope/telescope.nvim" },
     },
     opts = {
       model = "claude-3.7-sonnet",
@@ -59,6 +60,9 @@ return {
           prompt = commit_prompt,
           context = 'git:staged',
         },
+      },
+      integrations = {
+        telescope = true,
       },
       selection = function(_)
         return nil
