@@ -7,12 +7,9 @@ return {
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     },
-    init = function()
-      vim.g.neo_tree_remove_legacy_commands = true
-    end,
     cmd = "Neotree",
     keys = {
-      { "<F3>", "<cmd>Neotree toggle<cr>", desc = "切換檔案樹" },
+      { "fl", ":Neotree toggle<CR>", desc = "切換檔案樹" },
       { "<leader>e", "<cmd>Neotree focus<cr>", desc = "聚焦檔案樹", silent = true },
     },
     opts = {

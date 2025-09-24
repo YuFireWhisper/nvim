@@ -40,7 +40,7 @@ return {
               features = "all",
             },
             diagnostics = {
-              disabled = { "inactive-code" },
+              disabled = { "macro-error", "inactive-code" },
             },
             imports = {
               granularity = {

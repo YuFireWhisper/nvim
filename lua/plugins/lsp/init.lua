@@ -7,6 +7,7 @@ return {
       "folke/neodev.nvim",
     },
     config = function()
+      require("neodev").setup()
       require("mason").setup()
       require("mason-lspconfig").setup({
         ensure_installed = {
@@ -24,7 +25,6 @@ return {
         },
       })
 
-      -- 載入伺服器配置
       require("plugins.lsp.servers")
     end
   }
