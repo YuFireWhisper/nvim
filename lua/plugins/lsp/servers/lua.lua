@@ -1,9 +1,4 @@
-local lspconfig = require("lspconfig")
-local common = require("plugins.lsp.common")
-
-lspconfig.lua_ls.setup({
-  capabilities = common.capabilities,
-  on_attach = common.on_attach,
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
       diagnostics = {

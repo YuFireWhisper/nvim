@@ -1,9 +1,4 @@
-local lspconfig = require("lspconfig")
-local common = require("plugins.lsp.common")
-
-lspconfig.ts_ls.setup({
-  capabilities = common.capabilities,
-  on_attach = common.on_attach,
+vim.lsp.config('ts_ls', {
   settings = {
     typescript = {
       inlayHints = {
@@ -21,16 +16,11 @@ lspconfig.ts_ls.setup({
       referencesCodeLens = true,
     },
   },
-})
+});
 
-lspconfig.eslint.setup({
-  capabilities = common.capabilities,
-  on_attach = common.on_attach,
+vim.lsp.config('eslint', {
   settings = {
     workingDirectory = { mode = "location" },
     onIgnoredFiles = "off",
   },
-  root_dir = function(fname)
-    return lspconfig.util.find_git_ancestor(fname) or vim.fn.getcwd()
-  end,
 })
